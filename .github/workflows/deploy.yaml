@@ -29,3 +29,17 @@ jobs:
           docker_file: '.'
       - name: Get pre step result output image_pull_url
         run: echo "Completed....."
+
+    
+      - name: Execute remote SSH commands using password
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO }}:${{ github.run_number }}
+            sudo docker run --name myapp -d -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO }}:${{ github.run_number }}
+
+
